@@ -1,0 +1,6 @@
+
+<h1>Students</h1>
+<input type="text" placeholder="search Student" ng-model="searchText" />
+<ul>
+    <li ng-repeat="student in students | filter:search">{{ student.name}} {{ student.sGender | gender }} {{ student.cityName}}</li>
+</ul>
