@@ -1,0 +1,14 @@
+<?php
+    define('_DSROOT_', '../..');
+    include_once _DSROOT_.'/module/inc/cfg.inc';
+
+    $CX->clearResult();
+    $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT iCode AS id, sName AS name FROM nation');
+    foreach($CX->result['data'] AS $idx => $val) {
+         $CX->result['data'][$idx]['cities'] = $CX->pdo['angular']->selectSql('SELECT iCode AS id, sName AS name FROM city WHERE iNation ='.$val['id']);
+    }
+
+    echo json_encode($CX->result['data']);
+//       echo '<pre>';
+ //       print_r($data);
+ //       echo '</pre>';//

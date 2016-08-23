@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>Angular</title>
+    <link type="text/css" rel="stylesheet" href="./plugins/bootstrap-3.3.7/css/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="./plugins/datetimepicker/datetimepicker.css" />
+    <link type="text/css" rel="stylesheet" href="./module/css/base.css" />
+
+    <script type="text/javascript" src="./plugins/angular-1.5.8/angular.js"></script>
+    <script type="text/javascript" src="./plugins/angular-1.5.8/angular-route.js"></script>
+    <script type="text/javascript" src="./plugins/angular-1.5.8/i18n/angular-locale_ko-kr.js"></script>
+    <script type="text/javascript" src="./plugins/datetimepicker/datetimepicker.js"></script>
+    <script type="text/javascript" src="./plugins/ui-bootstrap-2.0.2/ui-bootstrap-tpls-2.0.2.min.js"></script>
+    <script type="text/javascript" src="./module/js/app.js"></script>
+    <script type="text/javascript" src="./module/js/filter.js"></script>
+    <script type="text/javascript" src="module/js/stringService.js"></script>
+    <base href="/example/" />
+</head>
+<!-- https://www.youtube.com/watch?v=hG8NM2FM8tg&list=PL6n9fhu94yhWKHkcL7RJmmXyxkuFB3KSl&index=28 -->
+<body ng-app="Demo">
+<table>
+    <tr>
+        <td colspan="2" class="header">Header</td>
+    </tr>
+    <tr>
+        <td class="leftMenu">
+            <a href="home">Home</a><br />
+            <a href="lecture">Lecture</a><br />
+            <a href="student">Student</a>
+        </td>
+        <td class="mainContents"><ng-view></ng-view></td>
+    </tr>
+    <tr>
+        <td colspan="2" class="footer">Footer</td>
+    </tr>
+</table>
+</body>
+</html>

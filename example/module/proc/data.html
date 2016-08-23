@@ -1,0 +1,28 @@
+<?php
+    define('_DSROOT_', '../..');
+    include_once _DSROOT_.'/module/inc/cfg.inc';
+
+    $CX->clearResult();
+    switch ($_GET['mode']) {
+        case 'emp':
+            $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT iCode AS id, sName AS name, sBirth AS birth, sGender AS gender, iSalary AS salary, sCity AS city FROM emp');
+            break;
+        case 'nation':
+            $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT iCode AS id, sName AS name, sBirth AS birth, sGender AS gender, iSalary AS salary, sCity AS city FROM emp');
+            foreach($CX->result['data'] AS $idx => $val) {
+                $CX->result['data'][$idx]['cities'] = $CX->pdo['angular']->selectSql('SELECT iCode AS id, sName AS name FROM city WHERE iNation ='.$val['id']);
+            }
+            break;
+        case 'lecture':
+            $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT iCode AS id, sName AS name FROM lecture');
+        break;
+        case 'student':
+            $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT s.iCode AS id, s.sName AS name, s.sBirth AS sBirth, s.sGender AS sGender, s.iCity AS iCity, c.sName AS cityName FROM student AS s INNER JOIN city AS c ON c.iCode = s.iCity');
+        break;
+    }
+    echo json_encode($CX->result['data']);
+
+//echo '<pre>';
+//print_r($CX->result['data']);
+//echo '</pre>';
+

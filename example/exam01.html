@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <title>Angular</title>
+    <link type="text/css" rel="stylesheet" href="./plugins/bootstrap-3.3.7/css/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="./plugins/datetimepicker/datetimepicker.css" />
+    <link type="text/css" rel="stylesheet" href="./module/css/base.css" />
+
+    <script type="text/javascript" src="./plugins/angular-1.5.8/angular.js"></script>
+    <script type="text/javascript" src="./plugins/angular-1.5.8/i18n/angular-locale_ko-kr.js"></script>
+    <script type="text/javascript" src="./plugins/datetimepicker/datetimepicker.js"></script>
+    <script type="text/javascript" src="./plugins/ui-bootstrap-2.0.2/ui-bootstrap-tpls-2.0.2.min.js"></script>
+    <script type="text/javascript" src="./module/js/exam01.js"></script>
+    <script type="text/javascript" src="./module/js/filter.js"></script>
+    <script type="text/javascript" src="module/js/stringService.js"></script>
+
+</head>
+<body ng-app="myModule">
+<div ng-controller="myController">
+    <div style="color: #f00">{{ error }}</div>
+    <input type="text" placeholder="search Employee" ng-model="searchText" />
+    <input type="text" placeholder="search Name" ng-model="searchText.name" />
+    <input type="text" placeholder="search City" ng-model="searchText.city" /><br />
+    <input type="checkbox" ng-model="exactMatch" />Exact Match&nbsp;
+    <input type="checkbox" ng-model="hideSalary" />Hide Salary
+    <table>
+        <thead>
+        <tr>
+            <th ng-click="sortData('name')">Name <div ng-class="getSortClass('name')"></div></th>
+            <th ng-click="sortData('birth')">Birth <div ng-class="getSortClass('birth')"></div></th>
+            <th ng-click="sortData('gender')">Gender <div ng-class="getSortClass('gender')"></div></th>
+            <th ng-click="sortData('city')">City <div ng-class="getSortClass('city')"></div></th>
+            <th ng-hide="hideSalary">Salary</th>
+            <th ng-show="hideSalary">Salary</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="employee in employees | orderBy:sortColumn:reverseSort | filter: search">
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.birth | date:'yyyy-MM-dd' }}</td>
+            <td>{{ employee.gender | gender }}</td>
+            <td>{{ employee.city }}</td>
+            <td ng-hide="hideSalary">{{ employee.salary | currency:'\\':2 }}</td>
+            <td ng-show="hideSalary">#####</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <ul>
+        <li ng-repeat="nation in nations" ng-init="parentIdx=$index" ng-click="searchCity(nation.id)">{{$index}} - {{ nation.name }}</li>
+    </ul>
+    <ul>
+        <li ng-repeat="city in cities">{{$index}} - {{ city.name }}</li>
+    </ul>
+
+    <table>
+        <tbody>
+        <tr>
+            <td>aaa</td>
+            <td><input type="text" ng-model="input" /></td>
+        </tr>
+        <tr>
+            <td>bbb</td>
+            <td><input type="text" ng-model="output" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="button" value="Process String" ng-click="transformString(input)" /></td>
+        </tr>
+        </tbody>
+    </table>
+    <!--https://www.youtube.com/watch?v=uF5jiRLRLX8&index=23&list=PL6n9fhu94yhWKHkcL7RJmmXyxkuFB3KSl&spfreload=1-->
+    <button id="top" ng-click="scrollTo('bottom')">bottom</button>
+    <div>
+        PhoneCat Tutorial App
+        A great way to get introduced to AngularJS is to work through this tutorial, which walks you through the construction of an Angular web app. The app you will build is a catalog that displays a list of Android devices, lets you filter the list to see only devices that interest you, and then view details for any device. <br /> <br />
+        demo application running in the browser <br /> <br />
+        Follow the tutorial to see how Angular makes browsers smarter — without the use of native extensions or plug-ins: <br /> <br />
+        See examples of how to use client-side data binding to build dynamic views of data that change immediately in response to user actions.<br /> <br />
+        See how Angular keeps your views in sync with your data without the need for DOM manipulation.<br />
+        Learn a better, easier way to test your web apps, with Karma and Protractor.<br />
+        Learn how to use dependency injection and services to make common web tasks, such as getting data into your app, easier.<br />
+        When you finish the tutorial you will be able to:<br /><br />
+
+        Create a dynamic application that works in all modern browsers.<br />
+        Use data binding to wire up your data model to your views.<br />
+        Create and run unit tests, with Karma.<br />
+        Create and run end-to-end tests, with Protractor.<br />
+        Move application logic out of the template and into components and controllers.<br />
+        Get data from a server using Angular services.<br />
+        Apply animations to your application, using the ngAnimate module.<br />
+        Structure your Angular applications in a modular way that scales well for larger projects.<br />
+        Identify resources for learning more about AngularJS.<br />
+        The tutorial guides you through the entire process of building a simple application, including writing and running unit and end-to-end tests. Experiments at the end of each step provide suggestions for you to learn more about AngularJS and the application you are building.<br /><br />
+
+        You can go through the whole tutorial in a couple of hours or you may want to spend a pleasant day really digging into it. If you're looking for a shorter introduction to AngularJS, check out the Getting Started document.<br /><br />
+
+        Environment Setup<br />
+        The rest of this page explains how you can set up your local machine for development. If you just want to read the tutorial, you can go straight to the first step: Step 0 - Bootstrapping.<br /><br />
+
+        Working with the Code<br />
+        You can follow along with this tutorial and hack on the code in the comfort of your own computer. This way, you can get hands-on practice of really writing Angular code and also on using the recommended testing tools.<br /><br />
+
+        The tutorial relies on the use of the Git versioning system for source code management. You don't need to know anything about Git to follow the tutorial other than how to install and run a few git commands.<br /><br />
+
+        Install Git<br /><br />
+        You can download and install Git from http://git-scm.com/download. Once installed, you should have access to the git command line tool. The main commands that you will need to use are:<br /><br />
+
+        git clone ...: Clone a remote repository onto your local machine.<br />
+        git checkout ...: Check out a particular branch or a tagged version of the code to hack on.<br />
+        Download angular-phonecat<br />
+        Clone the angular-phonecat repository located at GitHub by running the following command:<br /><br />
+
+        git clone --depth=16 https://github.com/angular/angular-phonecat.git<br />
+        This command creates an angular-phonecat sub-directory in your current directory.<br /><br />
+
+        The --depth=16 option tells Git to pull down only the last 16 commits. This makes the download much smaller and faster.<br />
+        Change your current directory to angular-phonecat.<br /><br />
+
+        cd angular-phonecat<br />
+        The tutorial instructions, from now on, assume you are running all commands from within the angular-phonecat directory.<br /><br />
+
+        Install Node.js<br />
+        If you want to run the preconfigured local web server and the test tools then you will also need Node.js v4+.<br /><br />
+
+        You can download a Node.js installer for your operating system from https://nodejs.org/en/download/.<br /><br />
+
+        Check the version of Node.js that you have installed by running the following command:<br /><br />
+
+        node --version<br />
+        butions, there might be a name clash with another utility called node. The suggested solution is to also install the nodejs-legacy apt package, which renames node to nodejs.<br /><br />
+
+        apt-get install nodejs-legacy npm<br />
+        nodejs --version<br />
+        npm --version<br />
+        If you need to run different versions of Node.js in your local environment, consider installing Node Version Manager (nvm) or Node Version Manager (nvm) for Windows.<br />
+        Once you have Node.js installed on your machine, you can download the tool dependencies by running:<br /><br />
+
+        npm install<br />
+        This command reads angular-phonecat's package.json file and downloads the following tools into the node_modules directory:<br /><br />
+
+        Bower - client-side code package manager<br />
+        Http-Server - simple local static web server<br />
+        Karma - unit test runner<br />
+        Protractor - end-to-end (E2E) test runner<br />
+    </div>
+    <button id="bottom" ng-click="scrollTo('top')">top</button>
+</div>
+</body>
+</html>
