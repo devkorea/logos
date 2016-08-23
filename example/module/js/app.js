@@ -42,8 +42,8 @@ app.controller('studentController', function($scope, $http) {
         $scope.error = reason_.data;
     });
 
-    $scope.search = function(item) {
-        if ($scope.searchText == undefined) {
+    $scope.search = function(item) { // 검색함수 지정
+        if ($scope.searchText == undefined) { // 검색 텍스트를 검사
             return true;
         } else {         
             if (item.name.toLocaleLowerCase().indexOf($scope.searchText.toLowerCase()) > -1 ||
