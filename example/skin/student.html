@@ -2,5 +2,10 @@
 <h1>Students</h1>
 <input type="text" placeholder="search Student" ng-model="searchText" />
 <ul>
-    <li ng-repeat="student in students | filter:search">{{ student.name}} {{ student.sGender | gender }} {{ student.cityName}}</li>
+    <li ng-repeat="student in stdCtrl.students | filter:search">
+        <a href="student/{{ student.id }}" style="color:red">route : {{ student.name}} {{ student.sGender | gender }} {{ student.cityName}}</a>
+        <a ui-sref="studentD({ id:student.id })" style="color:blue">ui-router : {{ student.name}} {{ student.sGender | gender }} {{ student.cityName}}</a>
+    </li>
 </ul>
+
+<button ng-click="stdCtrl.reloadData()">Reload</button>

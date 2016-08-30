@@ -17,8 +17,17 @@
             $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT iCode AS id, sName AS name FROM lecture');
         break;
         case 'student':
+            //sleep(2);
             $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT s.iCode AS id, s.sName AS name, s.sBirth AS sBirth, s.sGender AS sGender, s.iCity AS iCity, c.sName AS cityName FROM student AS s INNER JOIN city AS c ON c.iCode = s.iCity');
         break;
+        case 'studentD':  
+            //print_r($_GET);   
+            $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT s.iCode AS id, s.sName AS name, s.sBirth AS sBirth, s.sGender AS sGender, s.iCity AS iCity, c.sName AS cityName FROM student AS s INNER JOIN city AS c ON c.iCode = s.iCity WHERE s.iCode = '.$_GET['id']);
+        break;    
+        case 'gender':  
+            //print_r($_GET);   
+            $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT sGender, COUNT(sGender) FROM student GROUP BY sGender WITH ROLLUP;');
+        break;    
     }
     echo json_encode($CX->result['data']);
 
@@ -26,3 +35,4 @@
 //print_r($CX->result['data']);
 //echo '</pre>';
 
+  

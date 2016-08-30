@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Angular</title>
-<base href="/example/" />
+    <base href="/example/" />
     <link type="text/css" rel="stylesheet" href="./plugins/bootstrap-3.3.7/css/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="./plugins/datetimepicker/datetimepicker.css" />
     <link type="text/css" rel="stylesheet" href="./module/css/base.css" />
@@ -11,37 +11,43 @@
     <script type="text/javascript" src="./plugins/jquery/jquery-2.2.4.min.js"></script>
     <script type="text/javascript" src="./plugins/oLoder/0.1/jquery.oLoader.js"></script>
     <script type="text/javascript" src="./plugins/angular-1.5.8/angular.js"></script>
-    <!-- script type="text/javascript" src="./plugins/angular-1.5.8/angular-route.js"></script -->
-    <script type="text/javascript" src="./plugins/angular-0.3.1/angular-ui-router.js"></script>
+    <script type="text/javascript" src="./plugins/angular-1.5.8/angular-route.js"></script>
 
     <script type="text/javascript" src="./plugins/angular-1.5.8/i18n/angular-locale_ko-kr.js"></script>
     <script type="text/javascript" src="./plugins/datetimepicker/datetimepicker.js"></script>
     <script type="text/javascript" src="./plugins/ui-bootstrap-2.0.2/ui-bootstrap-tpls-2.0.2.min.js"></script>
-    <script type="text/javascript" src="./module/js/app.js"></script>
+    <script type="text/javascript" src="./module/js/exam02.js"></script>
     <script type="text/javascript" src="./module/js/filter.js"></script>
     <script type="text/javascript" src="module/js/stringService.js"></script>
     
-
 </head>
-<!-- https://www.youtube.com/watch?v=F6BIxHkiHjc&list=PL6n9fhu94yhWKHkcL7RJmmXyxkuFB3KSl&index=51 -->
+<!-- https://www.youtube.com/watch?v=F6BIxHkiHjc&list=PL6n9fhu94yhWKHkcL7RJmmXyxkuFB3KSl&index=42 -->
 <body ng-app="Demo">
-<table id="wrapBody">
+<table>
     <tr>
         <td colspan="2" class="header">Header <a href="/example/">Home</a></td>
     </tr>
     <tr>
         <td class="leftMenu">
-            <a ui-sref="home" ui-sref-active="activeState">Home</a>
-            <a ui-sref="lecture" ui-sref-active="activeState">Lecture</a>
-            <a ui-sref="student" ui-sref-active="activeState">Student</a>
+            <a href="home">Home</a><br />
+            <a href="lecture">Lecture</a><br />
+            <a href="student">Student</a>
         </td>
-        <td class="mainContents"><ui-view></ui-view></td>
+        <td class="mainContents"><ng-view></ng-view></td>
     </tr>
     <tr>
         <td colspan="2" class="footer">Footer</td>
     </tr>
 </table>
 
-
+<div ng-controller="parent1Controller as p1Ctrl">
+    {{ p1Ctrl.name }}
+    <div ng-controller="parent2Controller as p2Ctrl">
+        {{ p1Ctrl.name }} - {{ p2Ctrl.name }}
+        <div ng-controller="parent3Controller as p3Ctrl">
+            {{ p1Ctrl.name }} - {{ p2Ctrl.name }} - {{ p3Ctrl.name }}
+        </div>
+    </div>
+</div>
 </body>
 </html>

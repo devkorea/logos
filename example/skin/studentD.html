@@ -1,0 +1,29 @@
+
+<h1>Student Detail</h1>
+<table>
+    <tbody>
+        <tr>
+            <td>ID</td>
+            <td>{{ detlCtrl.student.id }}</td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>{{ detlCtrl.student.name }}</td>
+        </tr>
+        <tr>
+            <td>Gender</td>
+            <td>{{ detlCtrl.student.sGender | gender  }}</td>
+        </tr>
+        <tr>
+            <td>Birthday</td>
+            <td>{{ detlCtrl.student.sBirth }}</td>
+        </tr>    
+        <tr>
+            <td>City</td>
+            <td>{{ detlCtrl.student.cityName }}</td>
+        </tr>          
+        </tbody>
+</table>
+
+<a href="student">route : Back to Students</a><br />
+<a ui-sref="student">ui-router : Back to Students</a>

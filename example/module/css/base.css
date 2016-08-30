@@ -51,3 +51,18 @@ table > tfoot > tr > td {
     /*border-top: 10px solid black;*/
     display: inline-block;
 }
+
+a {
+    display: block;
+    padding: 3px 5px;
+}
+a:link, a:visited, a:active, a:hover {
+ text-decoration: none;
+}
+.activeState {
+    background-color: black;
+    color: white;
+}
+.mainContents {
+    width: 500px;
+}

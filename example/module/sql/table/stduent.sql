@@ -28,3 +28,12 @@ INSERT INTO student (sName, sBirth, sGender, iCity, iSalary) VALUES
 ,('Pam', '1979-10-27', '2', 25, 80000)
 ,('Todd', '1983-12-30', '1', 29, 90000)
 ,('Herry', '1981-01-05', '2', 39, 90000)
+
+INSERT INTO student (sName, sBirth, sGender, iCity, iSalary) VALUES
+ ('Peter', '1966-01-01', '1', 1, 150000)
+
+INSERT INTO student (sName, sBirth, sGender, iCity, iSalary) VALUES
+ ('Adam', '1970-09-06', '2', 1, 80000) 
+
+INSERT INTO student (sName, sBirth, sGender, iCity, iSalary) VALUES
+ ('Eve', '1978-07-07', '2', 5, 120000)  

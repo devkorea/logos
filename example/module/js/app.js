@@ -1,53 +1,110 @@
 /// <reference path="angular-1.5.8/angular.js" />
 /// <reference path="./example/plugins/angular-1.5.8/angular-route.js" />
 
-var app = angular.module('Demo', ['ngRoute']);
-app.config(function($routeProvider, $locationProvider) {
-    $routeProvider
-        .when('/home', {
+
+
+// ngRoute vs ui-router (ui-router 를 이용한 코드)
+var app = angular.module('Demo', ['ui.router']);
+app.config(function($stateProvider, $urlMatcherFactoryProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/home');
+    $urlMatcherFactoryProvider.caseInsensitive(true);
+    $stateProvider
+        .state('home', {
+            url:'/home',
             templateUrl: 'skin/home.html',
-            controller: 'homeController'
+            controller: 'homeController',
+            controllerAs: 'homeCtrl', 
+            data: {
+                customData1: 'home Data 1',
+                customData2: 'home Data 2',
+            }
         })
-        .when('/lecture', {
+        .state('lecture', {
+            url:'/lecture',
             templateUrl: 'skin/lecture.html',
-            controller: 'lectureController'
+            controller: 'lectureController',
+            controllerAs: 'lecCtrl', 
+            data: {
+                customData1: 'Lecture Data 1',
+                customData2: 'Lecture Data 2',
+            }
         })
-        .when('/student', {
+        .state('student', {
+            url:'/student',
             templateUrl: 'skin/student.html',
-            controller: 'studentController'
+            controller: 'studentController',
+            controllerAs: 'stdCtrl',
+            resolve: {
+                studentList: function($http) {   
+                    app.wrapBodyBack(true);                 
+                    return $http({method:'GET', url:'./module/proc/data.html?mode=student'}).then(function(response_) {
+                        return response_.data;
+                    }, function(reason_) {
+                        return reason_.data;
+                    });
+                }
+            }
         })
-        .otherwise({
-            redirectTo: '/home'
+        .state('studentD', {
+            url:'/studentD/:id',
+            templateUrl: 'skin/studentD.html',
+            controller: 'studentDController',
+            controllerAs: 'detlCtrl'
+        })
+        // $locationProvider.html5Mode(true)  // 이 부분에 대한 오류를 지속적으로 찾아볼것, htaccess, rewrite 오류와 함께(2016.08.27)
+});
+
+app.wrapBodyBack = function(bShow) {
+    if (bShow === true) {
+        $('#wrapBody').oLoader({
+            wholeWindow: false,
+            lockOverflow: true,
+            backgroundColor: '#000',
+            fadeInTime: 0,
+            fadeLevel: 0.7,
+            image: './module/img/ajax-loader.gif',
         });
-    $locationProvider.html5Mode(true);
+    } else {
+        setTimeout(function() {    
+            $('#wrapBody').oLoader('hide'); 
+        }, 250);
+    }
+}
+
+app.controller('homeController', function($state) {
+    this.message = 'Welcome to main';
+    this.homeCustomData1 = $state.current.data.customData1;
+    this.homeCustomData2 = $state.current.data.customData2;
+    this.lectureCustomData1 = $state.get('lecture').data.customData1;
+    this.lectureCustomData2 = $state.get('lecture').data.customData2;
 });
 
-app.controller('homeController', function($scope) {
-    $scope.message = 'Welcome to main';
-});
-
-
-app.controller('lectureController', function($scope, $http) {
+app.controller('lectureController', function($http) {
+    var $scp = this;
+    app.wrapBodyBack(true); 
     $http({method:'GET', url:'./module/proc/data.html?mode=lecture'}).then(function(response_) {
-        $scope.lectures = response_.data;
+        $scp.lectures = response_.data;
+        app.wrapBodyBack(false); 
     }, function(reason_) {
-        $scope.error = reason_.data;
-    });});
-
-
-app.controller('studentController', function($scope, $http) {
-    $http({method:'GET', url:'./module/proc/data.html?mode=student'}).then(function(response_) {
-        $scope.students = response_.data;
-    }, function(reason_) {
-        $scope.error = reason_.data;
+        $scp.error = reason_.data;
     });
+});
 
-    $scope.search = function(item) { // 검색함수 지정
-        if ($scope.searchText == undefined) { // 검색 텍스트를 검사
+app.controller('studentController', function(studentList, $state, $location) {
+    var $scp = this;
+    $scp.reloadData = function() {      
+        $state.reload();
+    }
+    
+    $scp.students = studentList; 
+    app.wrapBodyBack(false);
+
+    this.search = function(item) { // 검색함수 지정
+        if ($scp.searchText == undefined) { // 검색 텍스트를 검사
             return true;
         } else {         
-            if (item.name.toLocaleLowerCase().indexOf($scope.searchText.toLowerCase()) > -1 ||
-                item.cityName.toLocaleLowerCase().indexOf($scope.searchText.toLowerCase()) > -1) {
+            if (item.name.toLocaleLowerCase().indexOf($scp.searchText.toLowerCase()) > -1 ||
+                item.cityName.toLocaleLowerCase().indexOf($scp.searchText.toLowerCase()) > -1) {
                 return true;
             }
         }
@@ -55,7 +112,30 @@ app.controller('studentController', function($scope, $http) {
     }
 });
 
-app.filter('gender', function() {
+app.controller('studentDController', function($http, $stateParams) { 
+    var $scp = this;
+    app.wrapBodyBack(true);
+    $http({
+        method:'GET', 
+        url:'./module/proc/data.html',
+        params: {mode:'studentD', id:$stateParams.id},
+    }).then(function(response_) {    
+        $scp.student = response_.data[0];
+        app.wrapBodyBack(false);
+    }, function(reason_) {
+        $scp.error = reason_.data;
+    });
+});
+
+// app.controller('studentDController', function($http, $routeParams) {
+//     var $scp = this;
+//     $http({method:'get', url:'./module/proc/data.html', params:{mode:'studentD',id:$routeParams.id}}).then(function(response_) {
+//         $scp.student = response_.data[0];    
+//     }, function(reason_) {
+//         $scp.error = reason_.data;
+//     });
+// });    
+app.filter('gender', function() {   // 필터 추가
     return function(sGender) {
         switch (sGender) {
             case '1': return '男';
@@ -65,41 +145,3 @@ app.filter('gender', function() {
     }
 });
 
-
-
-// POST 방식으로 데이터 전송하는 방법
-// $http({
-//     method: 'POST' ,
-//     url: 'www.example.com',
-//     data: $.param({
-//         Name: '이름',
-//         Age: '나이',
-//         City: '지역'
-//     }),
-//     headers: {
-//         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-//     }
-// }).success(function(response) {
-//     console.log('Success');
-// }).finally(function() {
-//     console.log('Complete');
-// });
-
-// Module 외부에서 Controller 내 함수 호출하는 방법
-// angular.module('MainApp', [])
-//     .controller('MainController', function($scope) {
-//         $scope.start = function() {
-//             alert('Scope Start Function');
-//         }
-//     });
-//
-// function Scope() {
-//     var scope = angular.element(document.getElementById("Container")).scope();
-//     return scope;
-// }
-//
-// $(function () {
-//     Scope().$apply(function () {
-//         Scope().start();
-//     });
-// });
