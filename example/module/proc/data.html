@@ -26,7 +26,7 @@
         break;    
         case 'gender':  
             //print_r($_GET);   
-            $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT sGender, COUNT(sGender) FROM student GROUP BY sGender WITH ROLLUP;');
+            $CX->result['data'] = $CX->pdo['angular']->selectSql('SELECT IFNULL(sGender, 3), COUNT(sGender) AS iGender FROM student GROUP BY sGender WITH ROLLUP;');
         break;    
     }
     echo json_encode($CX->result['data']);

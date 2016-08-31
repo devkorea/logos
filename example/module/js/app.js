@@ -89,6 +89,20 @@ app.controller('lectureController', function($http) {
         $scp.error = reason_.data;
     });
 });
+// app.controller('studentPController', function($http, $stateParams) { 
+//     var $scp = this;
+//     app.wrapBodyBack(true);
+//     $http({
+//         method:'GET', 
+//         url:'./module/proc/data.html',
+//         params: {mode:'studentD', id:$stateParams.id},
+//     }).then(function(response_) {    
+//         $scp.student = response_.data[0];
+//         app.wrapBodyBack(false);
+//     }, function(reason_) {
+//         $scp.error = reason_.data;
+//     });
+// });
 
 app.controller('studentController', function(studentList, $state, $location) {
     var $scp = this;
