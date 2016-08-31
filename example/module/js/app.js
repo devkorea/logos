@@ -48,25 +48,38 @@ app.config(function($stateProvider, $urlMatcherFactoryProvider, $urlRouterProvid
        })
         .state('studentParent.student', {
             url:'/',
-            templateUrl: 'skin/student.html',
-            controller: 'studentController',
-            controllerAs: 'stdCtrl',
-            resolve: {
-                studentList: function($http) {   
-                    app.wrapBodyBack(true);                 
-                    return $http({method:'GET', url:'./module/proc/data.html?mode=student'}).then(function(response_) {
-                        return response_.data;
-                    }, function(reason_) {
-                        return reason_.data;
-                    });
+            views: {
+                'studentData': {
+                    templateUrl: 'skin/student.html',
+                    controller: 'studentController',
+                    controllerAs: 'stdCtrl',
+                    resolve: {
+                        studentList: function($http) {   
+                            app.wrapBodyBack(true);                 
+                            return $http({method:'GET', url:'./module/proc/data.html?mode=student'}).then(function(response_) {
+                                return response_.data;
+                            }, function(reason_) {
+                                return reason_.data;
+                            });
+                        }
+                    }
+                },
+                'totalData' : {
+                    controller: 'studentTotalController',
+                    controllerAs: 'studentTotCtrl',
+                    templateUrl: 'skin/studentTot.html',
                 }
-            }
+            },
         })
         .state('studentParent.studentD', {
             url:'/:id',
-            templateUrl: 'skin/studentD.html',
-            controller: 'studentDController',
-            controllerAs: 'detlCtrl'
+            views: {
+                studentData: {
+                    templateUrl: 'skin/studentD.html',
+                    controller: 'studentDController',
+                    controllerAs: 'detlCtrl'
+                }                    
+            }
         })
         // $locationProvider.html5Mode(true)  // 이 부분에 대한 오류를 지속적으로 찾아볼것, htaccess, rewrite 오류와 함께(2016.08.27)
 });
@@ -88,7 +101,6 @@ app.wrapBodyBack = function(bShow) {
     }
 }
 
-
 app.controller('homeController', function($state) {
     this.message = 'Welcome to main';
     this.homeCustomData1 = $state.current.data.customData1;
@@ -106,6 +118,10 @@ app.controller('lectureController', function($http) {
     }, function(reason_) {
         $scp.error = reason_.data;
     });
+});
+
+app.controller('studentTotalController', function(studentTotals) {
+    this.totals = studentTotals[2].total;
 });
 
 app.controller('studentPController', function(studentTotals) {
