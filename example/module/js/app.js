@@ -29,8 +29,25 @@ app.config(function($stateProvider, $urlMatcherFactoryProvider, $urlRouterProvid
                 customData2: 'Lecture Data 2',
             }
         })
-        .state('student', {
+        .state('studentParent', {
             url:'/student',
+            controller: 'studentPController',
+            controllerAs: 'studentPCtrl',
+            templateUrl: 'skin/studentP.html',
+            resolve: {
+                studentTotals: function($http) {   
+                    app.wrapBodyBack(true);                 
+                    return $http({method:'GET', url:'./module/proc/data.html?mode=gender'}).then(function(response_) {
+                        return response_.data;
+                    }, function(reason_) {
+                        return reason_.data;
+                    });
+                }
+            },
+            abstract: true
+       })
+        .state('studentParent.student', {
+            url:'/',
             templateUrl: 'skin/student.html',
             controller: 'studentController',
             controllerAs: 'stdCtrl',
@@ -45,8 +62,8 @@ app.config(function($stateProvider, $urlMatcherFactoryProvider, $urlRouterProvid
                 }
             }
         })
-        .state('studentD', {
-            url:'/studentD/:id',
+        .state('studentParent.studentD', {
+            url:'/:id',
             templateUrl: 'skin/studentD.html',
             controller: 'studentDController',
             controllerAs: 'detlCtrl'
@@ -71,6 +88,7 @@ app.wrapBodyBack = function(bShow) {
     }
 }
 
+
 app.controller('homeController', function($state) {
     this.message = 'Welcome to main';
     this.homeCustomData1 = $state.current.data.customData1;
@@ -89,6 +107,13 @@ app.controller('lectureController', function($http) {
         $scp.error = reason_.data;
     });
 });
+
+app.controller('studentPController', function(studentTotals) {
+    this.males = studentTotals[0].total;
+    this.females = studentTotals[1].total;
+    this.totals = studentTotals[2].total;
+});
+
 // app.controller('studentPController', function($http, $stateParams) { 
 //     var $scp = this;
 //     app.wrapBodyBack(true);
@@ -104,13 +129,14 @@ app.controller('lectureController', function($http) {
 //     });
 // });
 
-app.controller('studentController', function(studentList, $state, $location) {
+app.controller('studentController', function(studentList, $state, $location, studentTotals) {
     var $scp = this;
     $scp.reloadData = function() {      
         $state.reload();
     }
-    
+
     $scp.students = studentList; 
+    $scp.studentTotals = studentTotals; 
     app.wrapBodyBack(false);
 
     this.search = function(item) { // 검색함수 지정
